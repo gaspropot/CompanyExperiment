@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CompanyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Attribute">
+          <Key>
+            <PropertyRef Name="ATTR_ID" />
+          </Key>
+          <Property Name="ATTR_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ATTR_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ATTR_Value" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EMP_ID" />
+          </Key>
+          <Property Name="EMP_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EMP_Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EMP_DateOfHire" Type="datetime" Nullable="false" />
+          <Property Name="EMP_Supervisor" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="EmployeeAttribute">
+          <Key>
+            <PropertyRef Name="EMPATTR_EmployeeID" />
+            <PropertyRef Name="EMPATTR_AttributeID" />
+          </Key>
+          <Property Name="EMPATTR_EmployeeID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EMPATTR_AttributeID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Employee_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Employee1" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EMP_ID" />
+            </Principal>
+            <Dependent Role="Employee1">
+              <PropertyRef Name="EMP_Supervisor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeAttribute_Attribute">
+          <End Role="Attribute" Type="Self.Attribute" Multiplicity="1" />
+          <End Role="EmployeeAttribute" Type="Self.EmployeeAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attribute">
+              <PropertyRef Name="ATTR_ID" />
+            </Principal>
+            <Dependent Role="EmployeeAttribute">
+              <PropertyRef Name="EMPATTR_AttributeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeAttribute_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="EmployeeAttribute" Type="Self.EmployeeAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EMP_ID" />
+            </Principal>
+            <Dependent Role="EmployeeAttribute">
+              <PropertyRef Name="EMPATTR_EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CompanyModelStoreContainer">
+          <EntitySet Name="Attribute" EntityType="Self.Attribute" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeAttribute" EntityType="Self.EmployeeAttribute" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employee_Employee" Association="Self.FK_Employee_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Employee1" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeAttribute_Attribute" Association="Self.FK_EmployeeAttribute_Attribute">
+            <End Role="Attribute" EntitySet="Attribute" />
+            <End Role="EmployeeAttribute" EntitySet="EmployeeAttribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeAttribute_Employee" Association="Self.FK_EmployeeAttribute_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmployeeAttribute" EntitySet="EmployeeAttribute" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CompanyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Attribute">
+          <Key>
+            <PropertyRef Name="ATTR_ID" />
+          </Key>
+          <Property Name="ATTR_ID" Type="Guid" Nullable="false" />
+          <Property Name="ATTR_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ATTR_Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Employees" Relationship="Self.EmployeeAttribute" FromRole="Attribute" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EMP_ID" />
+          </Key>
+          <Property Name="EMP_ID" Type="Guid" Nullable="false" />
+          <Property Name="EMP_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EMP_DateOfHire" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EMP_Supervisor" Type="Guid" />
+          <NavigationProperty Name="Employee1" Relationship="Self.FK_Employee_Employee" FromRole="Employee" ToRole="Employee1" />
+          <NavigationProperty Name="Employee2" Relationship="Self.FK_Employee_Employee" FromRole="Employee1" ToRole="Employee" />
+          <NavigationProperty Name="Attributes" Relationship="Self.EmployeeAttribute" FromRole="Employee" ToRole="Attribute" />
+        </EntityType>
+        <Association Name="FK_Employee_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Employee1" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EMP_ID" />
+            </Principal>
+            <Dependent Role="Employee1">
+              <PropertyRef Name="EMP_Supervisor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EmployeeAttribute">
+          <End Role="Attribute" Type="Self.Attribute" Multiplicity="*" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="CompanyEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Attributes" EntityType="Self.Attribute" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <AssociationSet Name="FK_Employee_Employee" Association="Self.FK_Employee_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Employee1" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="EmployeeAttribute" Association="Self.EmployeeAttribute">
+            <End Role="Attribute" EntitySet="Attributes" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CompanyModelStoreContainer" CdmEntityContainer="CompanyEntities">
+          <EntitySetMapping Name="Attributes">
+            <EntityTypeMapping TypeName="CompanyModel.Attribute">
+              <MappingFragment StoreEntitySet="Attribute">
+                <ScalarProperty Name="ATTR_ID" ColumnName="ATTR_ID" />
+                <ScalarProperty Name="ATTR_Name" ColumnName="ATTR_Name" />
+                <ScalarProperty Name="ATTR_Value" ColumnName="ATTR_Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="CompanyModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EMP_ID" ColumnName="EMP_ID" />
+                <ScalarProperty Name="EMP_Name" ColumnName="EMP_Name" />
+                <ScalarProperty Name="EMP_DateOfHire" ColumnName="EMP_DateOfHire" />
+                <ScalarProperty Name="EMP_Supervisor" ColumnName="EMP_Supervisor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="EmployeeAttribute" TypeName="CompanyModel.EmployeeAttribute" StoreEntitySet="EmployeeAttribute">
+            <EndProperty Name="Attribute">
+              <ScalarProperty Name="ATTR_ID" ColumnName="EMPATTR_AttributeID" />
+            </EndProperty>
+            <EndProperty Name="Employee">
+              <ScalarProperty Name="EMP_ID" ColumnName="EMPATTR_EmployeeID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

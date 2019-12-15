@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="container">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="clearEmployeeTextBox();">Add New Employee</button><br /><br />
+    <table class="table">
+        <caption>Employees</caption>
+        <thead>
+            <tr>
+                <th>
+                    Employee Name
+                </th>
+                <th>
+                    Date Of Hire
+                </th>
+                <th>
+                    Supervisor
+                </th>
+            </tr>
+        </thead>
+        <tbody class="tbody1"></tbody>
+    </table>
+
+    <div class="AddAttribute">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#myAttributeModal" onclick="clearAttributeTextBox();">Add New Attribute</button><br /><br />
+    </div>
+
+    <div class="EmployeeAttributesTable">
+
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Add Employee</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="Name">Name</label>
+                            <input type="text" class="form-control" id="Name" placeholder="Name" />
+                        </div>
+                        <div class="form-group">
+                            <label for="DateOfHire">Date Of Hire</label>
+                            <input type="date" class="form-control" id="DateOfHire" />
+                        </div>
+                        <div class="form-group" id="Employees_Dropdown">
+
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="UpdateButton">
+                    <button type="button" class="btn btn-primary" id="btnAttributeAdd" onclick="return addEmployee();">Add</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myAttributeModal" tabindex="-1" role="dialog" aria-labelledby="myAttributeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title" id="myAttributeModalLabel">Add Attribute</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="AttributeName">Name</label>
+                            <input type="text" class="form-control" id="AttributeName" placeholder="Name" />
+                        </div>
+                        <div class="form-group">
+                            <label for="AttributeValue">Value</label>
+                            <input type="text" class="form-control" id="AttributeValue" placeholder="Value" />
+                        </div>
+                        <label>Related Employees</label>
+                        <div class="form-group" id="Employees_Checkboxes">
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnAddAttribute" onclick="return addAttribute();">Add</button>
+                    <div id="UpdateAttributeButton">
+
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
